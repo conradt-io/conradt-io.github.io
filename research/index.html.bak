@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Primary Meta Tags -->
+  <title>CY83R53C: Security Research - Mathias Conradt's Personal Website on Cybersecurity</title>
+  <meta name="title" content="CY83R53C: Security Research - Mathias Conradt's Personal Website on Cybersecurity">
+  <meta name="description" content="Personal website of Mathias Conradt on cybersecurity related topics such as application security (appsec), DevSecOps, Identity & Access Management (IAM), Open Source Intelligence (OSINT) and more.">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cy83r53c.com/">
+  <meta property="og:title" content="CY83R53C - Mathias Conradt's Personal Website on Cybersecurity">
+  <meta property="og:description" content="Personal website of Mathias Conradt on cybersecurity related topics such as application security (appsec), DevSecOps, Identity & Access Management (IAM), Open Source Intelligence (OSINT) and more.">
+  <meta property="og:image" content="https://cy83r53c.com/img/cs_logo_green.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://cy83r53c.com/">
+  <meta property="twitter:title" content="CY83R53C - Mathias Conradt's Personal Website on Cybersecurity">
+  <meta property="twitter:description" content="Personal website of Mathias Conradt on cybersecurity related topics such as application security (appsec), DevSecOps, Identity & Access Management (IAM), Open Source Intelligence (OSINT) and more.">
+  <meta property="twitter:image" content="https://cy83r53c.com/">
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container">
+      <div class="logo">
+          <!-- <a href="#">CY83R53C.com</a> -->
+          <a href="/"><img src="/img/cs_logo_green.png" height="100"/></a>
+      </div>
+      <div id="mainListDiv" class="main_list">
+          <ul class="navlinks">
+              <li><a href="/">HOME</a></li> <span class="pipe">|</span>
+              <li><a href="/about">ABOUT</a></li> <span class="pipe">|</span>
+              <li><a href="/events">EVENTS & TALKS</a></li> <span class="pipe">|</span>
+              <li><a href="/publications">PUBLICATIONS</a></li> <span class="pipe">|</span>
+              <li><a href="/research">SECURITY RESEARCH</a></li> <span class="pipe">|</span>
+              <li><a href="/imprint">IMPRINT</a></li>
+          </ul>
+      </div>
+      <span class="navTrigger">
+          <i></i>
+          <i></i>
+          <i></i>
+      </span>
+  </div>
+</nav>
+
+<section class="home">
+</section>
+
+<div class="content">
+  <div class="sidenav">
+    <div class="sidenav_inner">
+      <h1>&#x21E3;</h1>
+      <a href="#energymeter">[2022] ENERGY METER</a><br />
+      <a href="#supermarket">[2020] SUPERMARKET</a><br />
+      <a href="#cruiseline">[2019] CRUISE LINE</a><br />
+    </div>
+  </div>
+  <div style="width:80%; float:left;">
+    <div class="content_inner">
+      <h1>SECURITY RESEARCH</h1>
+      <h2><a name="print">INTRO</a></h2>
+      <p>
+        I'm not a professional full-time security researcher. This section will just function as a log around security and privacy issues I discover in applications and services I use in my everyday life.
+        <br /><br />
+      </p>
+
+      <hr />
+
+      <h2><a name="energymeter">[2022] Energy Meter: reporting API potentially leaking PII</a></h2>
+      <p>
+        (in progress)
+      </p>
+
+      <hr />
+
+      <h2><a name="supermarket">[2020] Supermarket: system misconfiguration with bottle vending machine and self-service counters</a></h2>
+      <p>
+        In 2020, I discovered and reported this flaw at a supermarket, where they have a bottle vending machine (Tomra) as well as self-service checkout counters.<br />
+        When returning bottles, you'll get a coupon with a barcode to use at the checkout counter to get the deposit back.<br /><br />
+        <img src="/img/research/IMG_20220726_171212.jpg" height="200"/>
+        <img src="/img/research/IMG_20220730_212807.jpg" height="200"/>
+        <img src="/img/research/IMG_20220726_171136.jpg" height="200"/>
+        <br /><br />
+        By accident I noticed that if you didn't throw away the coupon - as it would be the case at the regular, non-self-service counters - but re-scan it again a few days later, it would get accepted. In this case, I had put the coupon back in my shopping basket and next time wasn't sure if I'd already used that coupon already.<br />
+        This was obviously a system misconfiguration in combination with the self-service checkout process, for not checking against already used codes. Notably: re-scanning would only work after 1-2 days after, not right away.<br /><br />
+        This led me further to check if actually any code would get accepted, not just the ones issues by the vending machine.<br />
+        Analyzing the barcode (EAN_8 format) pattern (example: 21054189283920032102250000) with a couple of more coupons and barcodes collected, I noticed a pattern when breaking down the digit blocks:<br /><br />
+        21054189283920032102250000 -> 2105418 (Shop Number) 9283 (Coupon Id) 920 (Fixed Value) 0321 (Date) 0225 (Amount) 0000 (Product Id optional)<br /><br />
+        Knowing this pattern, it turned out that the checkout counters would accept any barcode created with a barcode generator apps with adjusted coupon id and any amount, potentially causing financial damage.<br /><br />
+        Once reported, they changed the system configuration and now, coupons only get accepted once and also only valid coupons that have actually been issues by the vending machine.<br />
+        <br />
+        (PoC provided)
+      </p>
+
+      <hr />
+
+      <h2><a name="cruiseline">[2019] Cruise Line: leaking passengers' PII</a></h2>
+      <p>
+        As a frequent cruise traveller, I found a few data privacy as well as security issues. I have been on a total of 10 cruise trips. The following issues came to my attention and can lead to potential:
+        <ul>
+            <li>exposure of complete passenger list (names)</li>
+            <li>compromised passenger board accounts & potential financial damage for customers</li>
+        </ul>
+      </p>
+      <p>
+        In general, there are issues of passenger name (and cabin number) being exposed to the public. This will also lead to security issues as documented below.
+      Furthermore, I’ll show a way to get the list of all passenger names.
+      </p>
+      <h3>Name tags on suit cases</h3>
+      <p>
+        The cruise line provides its passengers with name tags that hold full name and cabin number, which are to be attached to checked luggage and brought up to the cabin door BUT put outside the cabin in the hallway. This way, everybody can know passenger name and cabin number.<br />
+        <br />
+        <img src="/img/research/cruise1.jpg" height="300"/>
+        <img src="/img/research/cruise2.jpg" height="300"/>
+        <img src="/img/research/cruise3.png" height="200"/>
+      </p>
+      <h3>Cabin info at cabin doors</h3>
+      <p>
+        Cabin mail is put at the cabin door outside. This can also be read by anybody passing by. The mail includes passenger name and cabin number.<br/><br />
+        <img src="/img/research/cruise4.jpg" height="500"/>
+        <img src="/img/research/cruise5.jpg" height="500"/>
+      </p>
+      <h3>Receipts</h3>
+      <p>
+        Bar receipts also contain passenger full name and cabin number, and are often exposed on the bar counter.<br/><br />
+        <img src="/img/research/cruise6.jpg" height="300"/>
+        <img src="/img/research/cruise7.jpg" height="300"/>
+      </p>
+      <h3>Photo stations</h3>
+      <p>
+        The photo station is also a data privacy leakage point. While it doesn’t reveal cabin numbers, it can be used to obtain a list of all passenger names. This is how:
+
+        I checked the barcode on the passenger board card of the past two trips, both mine and the ones of my accompanying person. The barcode used on the board card is an ITF barcode, holding a 16 digit long number.<br />
+        I found a specific pattern. The last 2 digits remain fix (01, maybe a passenger classification), so do the first 10 digits (during one trip).
+        This means, among passengers, only digits 11-14 differ.<br />
+        (Digits 8-10 differ between different trips,  but are the same for all passengers on one particular trip).<br/><br />
+        <img src="/img/research/cruise8.jpg" height="300"/>
+
+        <br /><br />
+        Sample barcode values:<br />
+        9841000184696401<br />
+        9841000184510901<br />
+        9841000207233101<br />
+        9841000207385301<br />
+        <br />
+        Breaking down 9841000184696401 into multiple digit blocks:<br />
+        <br />
+        9841000 (Quasi fix number)		184	(Internal Trip ID)		6964 (Passenger ID)		01 (Passenger Classification)<br />
+        <br />
+        Knowing this pattern, you can get a barcode generator app like <a href="https://play.google.com/store/apps/details?id=com.blogspot.aeioulabs.barcode&hl=en" target="blank">Barcode Generator</a>, generate ITF barcodes counting up from 0000 to 9999 and replace the digits 11-14 (passenger ID) of your own barcode number with those. The Android app generates barcode right on screen, which you can then use with the photo stations.<br />
+        <br />
+        The problem within the photo stations is, that they don’t ask you to slide in the card to read the magnetic stripe, but just have an optical reader to scan the barcode.<br /><br />
+        <img src="/img/research/cruise9.jpg" height="400"/>
+        <img src="/img/research/cruise10.jpg" height="400"/>
+        <br /><br />
+        This means, instead of showing your own boarding card, you could just as well show the generated barcode on the Barcode Generator app.<br /><br />
+        <img src="/img/research/cruise11.png" height="400"/>
+        <img src="/img/research/cruise12.png" height="400"/>
+        <br /><br />
+        Once successfully scanned, the photo station would show an avatar with the user name on screen.<br /><br />
+        <img src="/img/research/cruise13.jpg" height="500"/><br />
+        <br />
+        Although time consuming, this is a way to get a list of all passenger names on board.<br />
+        <br />
+        It should also be noted that it can cause financial damage to a passenger when photos are being ordered under his name, without him knowing and eventually not even noticed on the invoice at checkout.
+      </p>
+      <h3>Provided Recommendations</h3>
+      <p>
+        <ul>
+          <li>Don’t print full name on tags/receipts. Just use firname and first letter if needed at all (Mathias C. / 6444) or masking ((Ma***** C****** / 6444), or even better, complete tokenization</li>
+          <li>Use unique alpha-numberic keys on the barcodes, not easily guessable sequences</li>
+        </ul>
+        (PoC provided)
+      </p>
+
+      <hr />
+
+      <h2><a name="print">[2019] Cruise Line: passengers board account take-over</a></h2>
+      <p>
+        The data privacy issues documented above show how easy it was to get passenger names and cabin number. With this comes a major security issue, allowing to take over other passengers' onboard accounts.<br />
+        <br />
+        The passenger board login for the passenger's onboard account system is based on passenger last name, cabin number and a 4-digit pin.<br />
+        First of all, a 4-digit PIN is not very secure. Furthermore, there seems to be no brute-force protection in place. When I mistyped my PIN multiple times, my account was neither locked nor were there any rate limits.<br />
+        <br />
+        This led me to the assumption that the accounts, with the knowledge of a passenger’s lastname and cabin number can be easily brute-forced by testing for all PIN combinations 0000-9999.<br />
+        <br />
+        Once a passenger account is compromised, one could financially damage a customer by placing orders on his behalf, such as buying and using internet plans (worth up to 119,90 EUR). Furthermore, personal information like the cruise line's club class, purchase history, can be accessed.<br /><br />
+
+        <img src="/img/research/cruise14.png" height="400"/>
+      </p>
+      <h3>Provided Recommendations</h3>
+      <p>
+        <ul>
+          <li>use stronger passwords</li>
+          <li>enable brute-force protection, lock accounts (to be unlocked via reception)</li>
+          <li>don’t use subsequent numbers for PINS for a passenger and accompanying person</li>
+        </ul>
+        (PoC provided)
+      </p>
+
+    </div>
+  </div>
+</div>
+
+<!-- Jquery needed -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/scripts.js"></script>
+
+</body>
+</html>
