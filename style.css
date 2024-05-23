@@ -49,11 +49,11 @@ body {
 }
 
 a:link {
-  color: #00FF4E;
+  color: #09B7A5;
 }
 
 h2, h3 {
-  color: #00FF4E;
+  color: #09B7A5;
 }
 
 /* Navbar section */
@@ -81,7 +81,7 @@ h2, h3 {
 }
 
 .nav div.logo a:hover {
-    color: #00FF4E;
+    color: #09B7A5;
 }
 
 .nav div.main_list {
@@ -115,7 +115,7 @@ h2, h3 {
 }
 
 .nav div.main_list ul li a:hover, a:visited {
-    color: #00FF4E;
+    color: #09B7A5;
 }
 
 .portrait {
