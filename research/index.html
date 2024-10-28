@@ -27,6 +27,14 @@
   <link rel="manifest" href="/site.webmanifest">
 
   <link rel="stylesheet" href="/style.css">
+  <script>
+      function enforceHTTPS() {
+          if (window.location.protocol !== "https:") {
+              window.location.href = "https://" + window.location.host + window.location.pathname + window.location.search;
+          }
+      }
+      window.onload = enforceHTTPS;
+  </script>      
 </head>
 <body>
 
