@@ -36,6 +36,14 @@
     }
     </style>
     <script src="https://kit.fontawesome.com/a5fdffbbdc.js" crossorigin="anonymous"></script>
+    <script>
+        function enforceHTTPS() {
+            if (window.location.protocol !== "https:") {
+                window.location.href = "https://" + window.location.host + window.location.pathname + window.location.search;
+            }
+        }
+        window.onload = enforceHTTPS;
+    </script>    
   </head>
 <body class="homepage">
 <script type="text/javascript">
