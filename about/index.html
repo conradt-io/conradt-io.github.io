@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="/style.css">
   <script>
       function enforceHTTPS() {
-          if (window.location.protocol !== "https:") {
+          if (window.location.protocol !== "https:" && window.location.host.includes('localhost') {
               window.location.href = "https://" + window.location.host + window.location.pathname + window.location.search;
           }
       }
@@ -59,7 +59,7 @@
               <li><a href="/about">ABOUT</a></li> <span class="pipe">|</span>
               <li><a href="/events">EVENTS & TALKS</a></li> <span class="pipe">|</span>
               <li><a href="/publications">PUBLICATIONS</a></li> <span class="pipe">|</span>
-              <!--<li><a href="/research">SECURITY RESEARCH</a></li> <span class="pipe">|</span>-->
+              <li><a href="/research">SECURITY RESEARCH</a></li> <span class="pipe">|</span>
               <li><a href="/imprint">IMPRINT</a></li>
           </ul>
       </div>
