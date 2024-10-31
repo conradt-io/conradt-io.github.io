@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="/style.css">
   <script>
       function enforceHTTPS() {
-          if (window.location.protocol !== "https:") {
+          if (window.location.protocol !== "https:" && window.location.host !== 'localhost:3000') {
               window.location.href = "https://" + window.location.host + window.location.pathname + window.location.search;
           }
       }
@@ -59,7 +59,7 @@
               <li><a href="/about">ABOUT</a></li> <span class="pipe">|</span>
               <li><a href="/events">EVENTS & TALKS</a></li> <span class="pipe">|</span>
               <li><a href="/publications">PUBLICATIONS</a></li> <span class="pipe">|</span>
-              <!--<li><a href="/research">SECURITY RESEARCH</a></li> <span class="pipe">|</span>-->
+              <li><a href="/research">SECURITY RESEARCH</a></li> <span class="pipe">|</span>
               <li><a href="/imprint">IMPRINT</a></li>
           </ul>
       </div>
@@ -88,6 +88,16 @@
 
       Below is a list of talks I held at industry events, ordered by topic and date (desc).<br /><br />
 
+      <img src="../img/events/itsa2024-3.jpeg" style="width: 100%;"/><br /><br />
+
+      <strong>Securing Application Development in the Age of AI</strong><br />
+      ◦ Snyk/Deloitte Webinar, 07.11.2024, Remote<br />
+      <br />
+
+      <strong>Secure Development in the Public Sector</strong><br />
+      ◦ Snyk/AWS/Deloitte Webinar, 05.11.2024, Remote<br />
+      <br />
+
       <strong>Secure Container Workloads In Build-Time With Snyk</strong><br />
       ◦ AWS Immersion Day, 23.05.2024, Remote<br />
       <br />
@@ -97,6 +107,7 @@
       <br />
       
       <strong>AI Hallucinations and Manipulation: Exploiting AI-Generated Code</strong><br />
+      ◦ IT-SA, 23.10.2024, Nuremberg/Germany<br />
       ◦ Almato DevCon, 07.06.2024, Pliezhausen/Germany<br />      
       ◦ DevSecCon, 06.12.2023, Munich/Germany<br />
       <br />
@@ -164,9 +175,9 @@
 
       <h2><a name="meetups">MEETUP ORGANIZER</a></h2>
 
-      <h3><a name="devseccon">DEVSECCON GERMANY (2021-TODAY)</a></h3>
-      While working at <a href="https://snyk.io" target="_blank">Snyk</a>, I initiated and still lead the <a href="https://devseccon.com" target="_blank">DevSecCon</a> Germany chapter.
-      Since its inception in 2021, I have hosted 10 virtual meetups, see <a href="https://www.meetup.com/devseccon-germany/events/past/">https://www.meetup.com/devseccon-germany/events/past/</a>.<br />
+      <h3><a name="devseccon">DEVSECCON GERMANY (2021-2024)</a></h3>
+      While working at <a href="https://snyk.io" target="_blank">Snyk</a>, I initiated and led the <a href="https://devseccon.com" target="_blank">DevSecCon</a> Germany chapter.
+      Between 2021-2023, I have hosted 20 virtual meetups, see <a href="https://www.meetup.com/devseccon-germany/events/past/">https://www.meetup.com/devseccon-germany/events/past/</a>. In 2024, I handed the DevSecCon Germany chapter over the my colleague Sebastian Roth (Snyk).<br />
       <br />
 
       DevSecCon is a safe and inclusive space for developers, operations, and security practitioners of all levels to make friends and improve their craft.<br />

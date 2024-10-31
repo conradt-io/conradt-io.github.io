@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="/style.css">
   <script>
       function enforceHTTPS() {
-          if (window.location.protocol !== "https:") {
+          if (window.location.protocol !== "https:" && window.location.host !== 'localhost:3000') {
               window.location.href = "https://" + window.location.host + window.location.pathname + window.location.search;
           }
       }
@@ -41,7 +41,7 @@
 <nav class="nav">
   <div class="container">
       <div class="logo">
-          <strong><a href="/">conradt.io</a></strong> | People · Processes · Technology
+          <strong><a href="/">conradt.io</a></strong> | Cybersecurity
           <!--<a href="/"><img src="/img/cs_logo_green.png" height="100"/></a>-->
       </div>
       <div id="mainListDiv" class="main_list">
@@ -69,29 +69,24 @@
   <div class="sidenav">
     <div class="sidenav_inner">
       <h1>&#x21E3;</h1>
-      <!--
       <a href="#energymeter">[2022] ENERGY METER</a><br />
       <a href="#supermarket">[2020] SUPERMARKET</a><br />
       <a href="#cruiseline">[2019] CRUISE LINE</a><br />
-	-->
     </div>
   </div>
   <div style="width:80%; float:left;">
     <div class="content_inner">
       <h1>SECURITY RESEARCH</h1>
       <h2><a name="print">INTRO</a></h2>
-<!--
+
       <p>
-        I'm not a professional full-time security researcher. This section will just function as a log around security and privacy issues I discover in applications and services I use in my everyday life.
+        I'm not a professional full-time security researcher. This section will just function as a log around security and privacy issues I discover in applications and services I use in my day-to-day life.
         <br /><br />
       </p>
 
       <hr />
--->
 
-Coming Soon
 
-<!--
       <h2><a name="energymeter">[2022] Energy Meter: reporting API potentially leaking PII</a></h2>
       <p>
         (in progress)
@@ -223,7 +218,6 @@ Coming Soon
         </ul>
         (PoC provided)
       </p>
--->
     </div>
   </div>
 </div>

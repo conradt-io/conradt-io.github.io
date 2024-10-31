@@ -38,7 +38,7 @@
     <script src="https://kit.fontawesome.com/a5fdffbbdc.js" crossorigin="anonymous"></script>
     <script>
         function enforceHTTPS() {
-            if (window.location.protocol !== "https:") {
+            if (window.location.protocol !== "https:" && window.location.host !== 'localhost:3000') {
                 window.location.href = "https://" + window.location.host + window.location.pathname + window.location.search;
             }
         }
@@ -68,7 +68,7 @@
               <li><a href="/about">ABOUT</a></li>  <span class="pipe">|</span>
               <li><a href="/events">EVENTS & TALKS</a></li>  <span class="pipe">|</span>
               <li><a href="/publications">PUBLICATIONS</a></li> <span class="pipe">|</span>
-              <!-- <li><a href="/research">SECURITY RESEARCH</a></li> <span class="pipe">|</span> -->
+              <li><a href="/research">SECURITY RESEARCH</a></li> <span class="pipe">|</span>
               <li><a href="/imprint">IMPRINT</a></li>
           </ul>
       </div>
@@ -92,7 +92,6 @@
    <div style="color:white;font-size:20px;margin-top:50px;">
      • Principal Solutions Engineer at Snyk<br />
      • OWASP Community Member<br />
-     • Co-Founder at Quasr<br />
      • DevSecCon Germany Initiator<br />
      • Hacking is NOT a Crime Supporter<br />
    </div>
@@ -100,6 +99,7 @@
    <div class="socials" style="color:white;font-size:20px;margin-top:20px;">
      <a href="https://www.linkedin.com/in/mathiasconradt/" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
      <a href="https://twitter.com/mathiasconradt" target="_blank" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+    <a href="https://infosec.exchange/@mathiasconradt" target="_blank" title="Mastodon"><i class="fa-brands fa-mastodon"></i></a>
      <a href="https://stackoverflow.com/users/241475/mathias-conradt?tab=profile" target="_blank" title="StackOverflow"><i class="fa-brands fa-stack-overflow"></i></a>
      <a href="https://github.com/mathiasconradt" target="_blank" title="Github"><i class="fa-brands fa-github"></i></a>
      <!-- <a href="" target="_blank"><i class="fa-regular fa-cube"></i></a> -->
