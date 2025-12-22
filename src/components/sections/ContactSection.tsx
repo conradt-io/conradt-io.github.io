@@ -60,7 +60,7 @@ export const ContactSection = () => {
                 >
                   <Phone className="w-6 h-6 text-accent flex-shrink-0" />
                   <span className="text-foreground/90 text-lg group-hover:text-accent transition-colors">
-                    +49 179 2976974
+                    +49 7152 3834605
                   </span>
                   <ExternalLink className="w-4 h-4 text-accent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </a>

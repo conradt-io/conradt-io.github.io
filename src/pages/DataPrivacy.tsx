@@ -100,7 +100,7 @@ export const DataPrivacy = () => {
               Mathias Conradt, Obere Burghalde 76/1, 71229 Leonberg, Germany
             </p>
             <p className="mb-4">
-              Telefon: +491792976974<br />
+              Telefon: +49 7152 3834605<br />
               E-Mail: info@conradt.io
             </p>
             <p className="mb-4">
