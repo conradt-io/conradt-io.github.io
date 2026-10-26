@@ -11,8 +11,8 @@ export const HomeSection = () => {
       id="home"
       className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 pt-24"
     >
-      <div className="container relative z-10 mx-auto">
-        <div className="mx-auto max-w-7xl rounded-[28px] border border-white/10 bg-[#111318]/42 p-7 shadow-2xl shadow-black/40 backdrop-blur-md md:p-12 lg:p-16">
+      <div className="container relative z-10 mx-auto px-6">
+        <div className="rounded-[28px] border border-white/10 bg-[#111318]/42 p-7 shadow-2xl shadow-black/40 backdrop-blur-md md:p-12 lg:p-16">
           <div className="mb-14 flex flex-wrap items-center justify-between gap-4">
             <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 font-mono text-xs uppercase tracking-[0.28em] text-white/60">
               <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_14px_rgba(52,211,153,0.9)]" />
