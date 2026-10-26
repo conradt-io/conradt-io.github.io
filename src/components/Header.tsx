@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
@@ -32,16 +32,22 @@ export const Header = () => {
           </a>
 
           {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-5">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={(e) => { e.preventDefault(); handleNavClick(item.href); }}
-                className="font-mono text-xs tracking-[0.22em] text-foreground/60 hover:text-white nav-link-hover transition-colors uppercase"
-              >
-                {item.label}
-              </a>
+          <nav className="hidden items-center gap-2.5 md:flex">
+            {navItems.map((item, index) => (
+              <Fragment key={item.label}>
+                {index > 0 && (
+                  <span aria-hidden="true" className="text-sm leading-none text-accent">
+                    ·
+                  </span>
+                )}
+                <a
+                  href={item.href}
+                  onClick={(e) => { e.preventDefault(); handleNavClick(item.href); }}
+                  className="font-mono text-xs tracking-[0.22em] text-foreground/60 hover:text-white nav-link-hover transition-colors uppercase"
+                >
+                  {item.label}
+                </a>
+              </Fragment>
             ))}
           </nav>
 
