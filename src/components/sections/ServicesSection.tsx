@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Atom, Bot, Fingerprint, Lock, Network, Shield } from "lucide-react";
 
 const focusAreas = [
@@ -35,7 +35,19 @@ const intersections = [
 ];
 
 export const ServicesSection = () => {
-  const [activeId, setActiveId] = useState<(typeof focusAreas)[number]["id"]>("security");
+  const [activeId, setActiveId] = useState<(typeof focusAreas)[number]["id"]>("quantum");
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setActiveId((currentId) => {
+        const currentIndex = focusAreas.findIndex((area) => area.id === currentId);
+        return focusAreas[(currentIndex + 1) % focusAreas.length].id;
+      });
+    }, 10_000);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
+
   const active = focusAreas.find((area) => area.id === activeId) ?? focusAreas[0];
   const ActiveIcon = active.icon;
 
