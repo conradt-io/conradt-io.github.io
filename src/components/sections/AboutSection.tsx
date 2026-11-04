@@ -6,21 +6,21 @@ const strengths = [
   "Application security and DevSecOps",
   "AI/LLM security and governance",
   "Open-source building and self-hosted workflows",
-  "Security research with CVE credits pending",
+  "Security research with published CVE credits",
 ];
 
 const cves = [
   {
     id: "CVE-2026-109856",
-    title: "Apache OFBiz — details to be announced once the CVE record is published.",
+    title: "Apache OFBiz: Missing Authorization in Financial Account Services Enables Unauthorized Balance Manipulation.",
   },
   {
     id: "CVE-2026-114272",
-    title: "Apache OFBiz — details to be announced once the CVE record is published.",
+    title: "Apache OFBiz: Authorization Bypass Through User-Controlled Key in Content Viewing Enables Unauthorized Content Disclosure.",
   },
   {
     id: "CVE-2026-114271",
-    title: "Apache OFBiz — details to be announced once the CVE record is published.",
+    title: "Apache OFBiz: Authorization Bypass Through User-Controlled Key in Shopping Lists Enables Cross-Party Shopping List Modification.",
   },
 ];
 
@@ -53,7 +53,7 @@ export const AboutSection = () => {
 
             <div className="mt-8 rounded-2xl border border-amber-300/20 bg-amber-300/10 p-5">
               <p className="font-mono text-xs uppercase tracking-[0.24em] text-amber-200/80">Vulnerability research</p>
-              <p className="mt-3 text-white/75">Upcoming CVE credits under my name for Apache OFBiz. Details will be announced after publication, following responsible disclosure practice.</p>
+              <p className="mt-3 text-white/75">Published CVE credits under my name for Apache OFBiz authorization issues:</p>
               <div className="mt-4 space-y-3">
                 {cves.map((cve) => (
                   <div key={cve.id} className="rounded-xl border border-amber-200/10 bg-black/10 p-4">

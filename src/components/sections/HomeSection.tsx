@@ -52,11 +52,11 @@ export const HomeSection = () => {
                 <span className="font-mono text-xs uppercase tracking-[0.28em]">Signal</span>
               </div>
               <p className="rounded-2xl border border-white/10 bg-white/[0.018] p-4 text-sm leading-6 text-white/70">Three independent focus areas. Strongest when combined.</p>
-              <p className="rounded-2xl border border-white/10 bg-white/[0.018] p-4 text-sm leading-6 text-white/70">Security depth from AppSec, DevSecOps, AI/LLM risks, vulnerability research, and upcoming CVE credits.</p>
+              <p className="rounded-2xl border border-white/10 bg-white/[0.018] p-4 text-sm leading-6 text-white/70">Security depth from AppSec, DevSecOps, AI/LLM risks, vulnerability research, and published CVE credits.</p>
               <p className="rounded-2xl border border-white/10 bg-white/[0.018] p-4 text-sm leading-6 text-white/70">Quantum and AI as pragmatic fields for experimentation, engineering leverage, and future-proof architecture.</p>
               <div className="flex items-center gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm text-emerald-200 lg:col-span-4">
                 <ShieldCheck className="h-5 w-5 flex-shrink-0" />
-                CVE credits pending: CVE-2026-109856 · CVE-2026-114271 · CVE-2026-114272 · Apache OFBiz authorization research
+                Published CVE credits: CVE-2026-109856 · CVE-2026-114271 · CVE-2026-114272 · Apache OFBiz authorization research
               </div>
             </div>
           </div>
