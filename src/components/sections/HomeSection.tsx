@@ -56,7 +56,15 @@ export const HomeSection = () => {
               <p className="rounded-2xl border border-white/10 bg-white/[0.018] p-4 text-sm leading-6 text-white/70">Quantum and AI as pragmatic fields for experimentation, engineering leverage, and future-proof architecture.</p>
               <div className="flex items-center gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4 text-sm text-emerald-200 lg:col-span-4">
                 <ShieldCheck className="h-5 w-5 flex-shrink-0" />
-                Published CVE credits: CVE-2026-109856 · CVE-2026-114271 · CVE-2026-114272 · Apache OFBiz authorization research
+                <span>
+                  Published CVE credits:{" "}
+                  <a href="https://www.cve.org/CVERecord?id=CVE-2026-109856" target="_blank" rel="noopener noreferrer" className="transition hover:text-white">CVE-2026-109856</a>
+                  {" · "}
+                  <a href="https://www.cve.org/CVERecord?id=CVE-2026-114271" target="_blank" rel="noopener noreferrer" className="transition hover:text-white">CVE-2026-114271</a>
+                  {" · "}
+                  <a href="https://www.cve.org/CVERecord?id=CVE-2026-114272" target="_blank" rel="noopener noreferrer" className="transition hover:text-white">CVE-2026-114272</a>
+                  {" · Apache OFBiz authorization research"}
+                </span>
               </div>
             </div>
           </div>

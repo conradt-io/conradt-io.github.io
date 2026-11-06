@@ -57,7 +57,14 @@ export const AboutSection = () => {
               <div className="mt-4 space-y-3">
                 {cves.map((cve) => (
                   <div key={cve.id} className="rounded-xl border border-amber-200/10 bg-black/10 p-4">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-amber-100">{cve.id}</p>
+                    <a
+                      href={`https://www.cve.org/CVERecord?id=${cve.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-mono text-xs uppercase tracking-[0.18em] text-amber-100 transition hover:text-white"
+                    >
+                      {cve.id}
+                    </a>
                     <p className="mt-2 text-sm leading-6 text-white/70">{cve.title}</p>
                   </div>
                 ))}
