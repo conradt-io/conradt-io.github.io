@@ -31,7 +31,7 @@ export const HomeSection = () => {
           <div className="space-y-12">
             <div>
               <p className="mb-6 font-mono text-sm uppercase tracking-[0.4em] text-accent/80">Independent IT Professional</p>
-              <h1 className="whitespace-nowrap text-[clamp(2.15rem,7.4vw,6.75rem)] font-black leading-[0.98] tracking-[-0.065em] text-white">
+              <h1 className="whitespace-nowrap text-[clamp(2.15rem,7.4vw,6.75rem)] font-semibold leading-[1.02] tracking-[-0.045em] text-white">
                 Quantum <span className="text-accent/65">/</span> AI <span className="text-accent/65">/</span> Security
               </h1>
               <p className="mt-10 max-w-3xl text-lg leading-8 text-white/70 md:text-xl">
